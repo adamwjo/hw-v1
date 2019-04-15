@@ -2,12 +2,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const CONFIG = require("./config.js");
+const bodyParser = require('body-parser');
 
 //Route Imports
 const users = require('./routes/api/users.js');
-
-
-
 
 
 
@@ -19,11 +17,13 @@ mongoose.connect(db)
 
 
 
-
-//Start app 
+//Start App 
 const app = express();
 
 
+//App BodyParser Middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 
 
