@@ -3,6 +3,10 @@ const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const passport = require('passport');
+const config = require('../../config.js');
+
 
 //Load User Model
 const User = require('../../models/User.js');
