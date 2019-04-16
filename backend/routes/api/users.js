@@ -20,6 +20,7 @@ router.get('/test', (req, res) => {
 // - New User SignUp
 // - PUBLIC-ACCESS
 router.post('/register', (req, res) => {
+    //checks to see if email already exits
     User.findOne({ email: req.body.email })
         .then(user => {
             if(user){
@@ -27,6 +28,7 @@ router.post('/register', (req, res) => {
                     email: "Email already exits"
                 });
             } else {
+                //if user does not already exist new user is initialized
                 const newUser = new User({
                     first_name: req.body.first_name,
                     last_name: req.body.last_name,
@@ -34,6 +36,7 @@ router.post('/register', (req, res) => {
                     email: req.body.email,
                     password: req.body.password,
                 });
+                //before new user is saved to database password must be salted and hashed
                 bcrypt.genSalt(10, (err, salt) => {
                     bcrypt.hash(newUser.password, salt, (err, hash) => {
                         if(err) throw err;
@@ -46,6 +49,33 @@ router.post('/register', (req, res) => {
             }
         })
 });
+
+// - GET api/users/login
+// - User Login
+// - PUBLIC-ACCESS
+router.post('/login', (req, res) => {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    //finds user by email
+    User.findOne({ email })
+        .then(user => {
+            if(!user) {
+                return res.status(404).json({email: 'User not found'});
+            }
+            //if email is able to found, password is now checked
+            //The compare function compared the password with the hashed password thate exits in the database.
+            bcrypt.compare(password, user.password).then(isMatch => {
+                    if(isMatch){
+                        //if the password matches all necessary authorizations may now be issued
+                        res.json({ message: "Successful Login" })
+                    } else {
+                        return res.status(400).json({ password: "Password does not match email account" })
+                    }
+                })
+        })
+});
+
 
 
 
