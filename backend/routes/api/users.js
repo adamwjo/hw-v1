@@ -2,11 +2,12 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 
 //Load User Model
 const User = require('../../models/User.js');
 
-// - ROUTE = GET api/users/test
+// - GET api/users/test
 // - Test route for Users resource
 // - PUBLIC-ACCESS
 router.get('/test', (req, res) => {
@@ -15,7 +16,7 @@ router.get('/test', (req, res) => {
     })
 });
 
-// - ROUTE = GET api/users/register
+// - GET api/users/register
 // - New User SignUp
 // - PUBLIC-ACCESS
 router.post('/register', (req, res) => {
