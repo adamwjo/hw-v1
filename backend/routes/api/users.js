@@ -71,8 +71,21 @@ router.post('/login', (req, res) => {
             //The compare function compared the password with the hashed password thate exits in the database.
             bcrypt.compare(password, user.password).then(isMatch => {
                     if(isMatch){
-                        //if the password matches all necessary authorizations may now be issued
-                        res.json({ message: "Successful Login" })
+                        //if the password matches JWT token can now be signed
+                        //You can define a payload you wish to pass along
+
+                        const payload = {
+                            id: user.id,
+                            first_name: user.first_name
+                        }
+
+                        jwt.sign(payload, config.JWTSecret, {  expiresIn: 3600 }, (err, token) => {
+                            res.json({
+                                success: true,
+                                token: "Bearer" + token
+                            });
+                        });
+
                     } else {
                         return res.status(400).json({ password: "Password does not match email account" })
                     }
