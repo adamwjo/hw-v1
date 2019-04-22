@@ -28,6 +28,7 @@ app.use(bodyParser.json());
 
 //Passport middleware
 app.use(passport.initialize());
+require('./config/passport.js')(passport);
 
 
 

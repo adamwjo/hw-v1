@@ -93,6 +93,18 @@ router.post('/login', (req, res) => {
         })
 });
 
+// - GET api/users/current
+// - Route to obtain current user with jwt payload
+// - Private-ACCESS
+router.get('/current', passport.authenticate('jwt', { session: false }), (req, res) => {
+    res.json({
+        id: req.user.id,
+        first_name: req.user.first_name,
+        username: req.user.first_name,
+        email: req.user.email 
+    })
+});
+
 
 
 
