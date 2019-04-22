@@ -5,7 +5,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
-const config = require('../../config.js');
+const config = require('../../config/config.js');
 
 
 //Load User Model
@@ -82,7 +82,7 @@ router.post('/login', (req, res) => {
                         jwt.sign(payload, config.JWTSecret, {  expiresIn: 3600 }, (err, token) => {
                             res.json({
                                 success: true,
-                                token: "Bearer" + token
+                                token: "Bearer " + token
                             });
                         });
 

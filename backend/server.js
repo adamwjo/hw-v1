@@ -1,8 +1,9 @@
 //Module Imports
 const express = require("express");
 const mongoose = require("mongoose");
-const CONFIG = require("./config.js");
+const CONFIG = require("./config/config.js");
 const bodyParser = require('body-parser');
+const passport = require('passport');
 
 //Route Imports
 const users = require('./routes/api/users.js');
@@ -24,6 +25,9 @@ const app = express();
 //App BodyParser Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+//Passport middleware
+app.use(passport.initialize());
 
 
 
