@@ -8,6 +8,9 @@ const passport = require('passport');
 const config = require('../../config/config.js');
 
 
+//Load User Valiidations
+const validateRegisterInput = require('../../validation/register');
+
 //Load User Model
 const User = require('../../models/User.js');
 
@@ -24,6 +27,13 @@ router.get('/test', (req, res) => {
 // - New User SignUp
 // - PUBLIC-ACCESS
 router.post('/register', (req, res) => {
+    // The first thing we want to do destructure the errors we want to validate against
+    const { errors, isValid } = validateRegisterInput(req.body);
+    //one the errors are pulled out we check them
+    if(!isValid) {
+       return res.status(400).json(errors) 
+    }
+    
     //checks to see if email already exits
     User.findOne({ email: req.body.email })
         .then(user => {
