@@ -10,9 +10,17 @@ const config = require('../../config/config.js');
 
 //Load User Valiidations
 const validateRegisterInput = require('../../validation/register');
+const validateLoginInput =  require('../../validation/login.js');
 
 //Load User Model
 const User = require('../../models/User.js');
+
+
+
+//**************************** ROUTES *************************************************************//
+
+
+
 
 // - GET api/users/test
 // - Test route for Users resource
@@ -68,6 +76,12 @@ router.post('/register', (req, res) => {
 // - User Login
 // - PUBLIC-ACCESS
 router.post('/login', (req, res) => {
+    const { errors, isValid } = validateLoginInput(req.body);
+    //one the errors are pulled out we check them
+    if(!isValid) {
+       return res.status(400).json(errors) 
+    }
+
     const email = req.body.email;
     const password = req.body.password;
 
@@ -75,7 +89,8 @@ router.post('/login', (req, res) => {
     User.findOne({ email })
         .then(user => {
             if(!user) {
-                return res.status(404).json({email: 'User not found'});
+                errors.email = "User not found"
+                return res.status(404).json(errors)
             }
             //if email is able to found, password is now checked
             //The compare function compared the password with the hashed password thate exits in the database.
@@ -97,7 +112,8 @@ router.post('/login', (req, res) => {
                         });
 
                     } else {
-                        return res.status(400).json({ password: "Password does not match email account" })
+                        errors.password = "Invalid Password"
+                        return res.status(400).json(errors)
                     }
                 })
         })
